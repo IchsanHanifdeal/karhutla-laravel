@@ -25,7 +25,7 @@
             <table class="table table-zebra mt-3">
                 <thead>
                     <tr class="text-center">
-                        @foreach (['No', 'Lokasi', 'Radius', 'Level', 'Register'] as $item)
+                        @foreach (['No', 'Lokasi', 'Radius', 'Level', 'foto', 'Register'] as $item)
                             <th class="uppercase font-bold">{{ $item }}</th>
                         @endforeach
                     </tr>
@@ -37,11 +37,15 @@
                             <td class="font-semibold uppercase">{{ $item->lat . ' , ' . $item->long }}</td>
                             <td class="font-semibold uppercase">{{ $item->radius . ' meter' }}</td>
                             <td class="font-semibold uppercase">{{ $item->level }}</td>
+                            <td class="font-semibold uppercase">
+                                <label for="dokumentasi_modal_{{ $item->id_lokasi }}"
+                                    class="w-full btn btn-accent">Lihat</label>
+                            </td>
                             <td class="font-semibold uppercase">{{ $item->created_at }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center font-semibold uppercase">Data lokasi tidak tersedia.
+                            <td colspan="6" class="text-center font-semibold uppercase">Data lokasi tidak tersedia.
                             </td>
                         </tr>
                     @endforelse
@@ -85,4 +89,34 @@
         <b>Level:</b> ${item.level}
     `);
     });
+</script>
+
+@foreach ($lokasi as $i => $pe)
+    <input type="checkbox" id="dokumentasi_modal_{{ $pe->id_lokasi }}" class="modal-toggle" />
+    <div class="modal" role="dialog">
+        <div class="modal-box" id="modal_box_{{ $pe->id_lokasi }}">
+            <h3 class="text-lg font-bold">Dokumentasi</h3>
+            <div class="flex flex-col w-full gap-3 mt-3 rounded-lg overflow-hidden">
+                @if ($pe && isset($pe->dokumentasi))
+                    <img id="dokumentasi_preview_{{ $pe->id_lokasi }}" src="{{ asset('storage/images/' . $pe->dokumentasi) }}"
+                        class="border size-full" alt="dokumentasi" onload="adjustModalSize('{{ $pe->id_lokasi }}')">
+                @else
+                    <img id="dokumentasi_preview_{{ $pe->id_lokasi }}" src="https://ui-avatars.com/api/?name=Null"
+                        class="border size-full" alt="dokumentasi Default" onload="adjustModalSize('{{ $pe->id_lokasi }}')">
+                @endif
+            </div>
+        </div>
+        <label class="modal-backdrop" for="dokumentasi_modal_{{ $pe->id_lokasi }}"></label>
+    </div>
+@endforeach
+
+<script>
+    function adjustModalSize(id) {
+        const img = document.getElementById(`dokumentasi_preview_${id_lokasi}`);
+        const modalBox = document.getElementById(`modal_box_${id_lokasi}`);
+        if (img && modalBox) {
+            modalBox.style.width = `${img.naturalWidth}px`;
+            modalBox.style.height = `${img.naturalHeight + 50}px`; // Adjust 50px for header and padding
+        }
+    }
 </script>

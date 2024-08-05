@@ -25,8 +25,7 @@
                 Form Pengaduan Karhutla
             </h1>
             <div id="map" class="h-96 mb-6 rounded-lg"></div>
-            <form id="reportForm" class="space-y-6 bg-gray-50 p-6 rounded-lg shadow-md" method="POST"
-                action="{{ route('pengaduan.store') }}">
+            <form id="reportForm" class="space-y-6 bg-gray-50 p-6 rounded-lg shadow-md" method="POST" action="{{ route('pengaduan.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="flex flex-col md:flex-row md:space-x-6">
                     <div class="flex-1">
@@ -56,6 +55,13 @@
                         <option value="tinggi">Tinggi</option>
                     </select>
                 </div>
+                <div>
+                    <label class="block mb-1 font-semibold text-gray-600" for="fileInput">Upload Dokumentasi<span
+                            class="text-red-500">*</span></label>
+                    <input type="file" name="image" class="w-full file-input" id="foto" />
+                    <img id="preview" class="flex-shrink-0 mt-3 border rounded-lg w-full max-h-[300px] object-cover"
+                        src="" alt="">
+                </div>
                 <div class="text-center">
                     <button type="submit" class="btn btn-secondary capitalize">
                         Simpan
@@ -65,6 +71,28 @@
         </div>
     </div>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const fotoInput = document.getElementById('foto');
+            const previewImage = document.getElementById('preview');
+            previewImage.style.display = 'none';
+
+            fotoInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const blob = URL.createObjectURL(file);
+                    previewImage.style.display = 'block';
+                    previewImage.src = blob;
+                }
+            });
+
+            previewImage.addEventListener('click', function() {
+                previewImage.style.display = 'none';
+                previewImage.src = '';
+                fotoInput.value = '';
+            });
+        });
+    </script>
     <script>
         var map = L.map('map').setView([1.5393453, 101.6149666], 13);
 

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('radius');
             $table->enum('level', ['rendah', 'menengah', 'tinggi']);
             $table->enum('validasi', ['diajukan', 'diterima'])->default('diajukan');
+            $table->string('dokumentasi')->nullable();
             $table->timestamps();
         });
     }

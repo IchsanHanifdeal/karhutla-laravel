@@ -13,7 +13,7 @@
                         <table class="table table-zebra">
                             <thead>
                                 <tr>
-                                    @foreach (['no', 'Lokasi', 'Radius', 'Level', 'validasi', 'last update', 'register', ''] as $item)
+                                    @foreach (['no', 'Lokasi', 'Radius', 'Level', 'validasi', 'foto', 'last update', 'register', ''] as $item)
                                         <th class="uppercase font-bold">{{ $item }}</th>
                                     @endforeach
                                 </tr>
@@ -33,6 +33,10 @@
                                         </td>
                                         <td class="font-semibold">{{ $item->level }}</td>
                                         <td class="font-semibold">{{ $item->validasi }}</td>
+                                        <td class="font-semibold uppercase">
+                                            <label for="dokumentasi_modal_{{ $item->id_lokasi }}"
+                                                class="w-full btn btn-accent">Lihat</label>
+                                        </td>
                                         <td class="uppercase">{{ $item->updated_at }}</td>
                                         <td class="uppercase">{{ $item->created_at }}</td>
                                         @if ($item->validasi === 'diajukan')
@@ -95,4 +99,23 @@
             </form>
         </dialog>
     @endforeach
+@endforeach
+
+@foreach ($pengajuan as $i => $pe)
+    <input type="checkbox" id="dokumentasi_modal_{{ $pe->id_lokasi }}" class="modal-toggle" />
+    <div class="modal" role="dialog">
+        <div class="modal-box">
+            <h3 class="text-lg font-bold">Dokumentasi</h3>
+            <div class="flex flex-col w-full gap-3 !h-full mt-3 rounded-lg overflow-hidden">
+                @if ($pe && isset($pe->dokumentasi))
+                    <img id="dokumentasi_preview_{{ $pe->id_lokasi }}" src="{{ asset('storage/images/' . $pe->dokumentasi) }}"
+                        class="border size-full" alt="dokumentasi">
+                @else
+                    <img id="dokumentasi_preview_{{ $pe->id_lokasi }}" src="https://ui-avatars.com/api/?name=Null"
+                        class="border size-full" alt="dokumentasi Default">
+                @endif
+            </div>
+        </div>
+        <label class="modal-backdrop" for="dokumentasi_modal_{{ $pe->id_lokasi }}"></label>
+    </div>
 @endforeach

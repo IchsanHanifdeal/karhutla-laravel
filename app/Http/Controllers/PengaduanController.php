@@ -37,6 +37,10 @@ class PengaduanController extends Controller
             'level' => 'required',
         ]);
 
+        $image = $request->file('image');
+        $fileName = uniqid() . '.' . $image->getClientOriginalExtension();
+        $image->storeAs('public/images', $fileName);
+
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
@@ -47,6 +51,7 @@ class PengaduanController extends Controller
                 'long' => $request->lng,
                 'radius' => $request->radius,
                 'level' => $request->level,
+                'dokumentasi' => $fileName,
             ]);
 
             toastr()->success('Pengajuan Berhasil!');
